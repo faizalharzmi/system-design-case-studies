@@ -1,0 +1,23 @@
+name: Validate case studies
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check required documentation
+        run: |
+          test -s README.md
+          test -s docs/scalable-rest-api.md
+          test -s docs/multi-tenant-saas.md
+          test -s docs/asynchronous-provisioning.md
+          test -s docs/legacy-modernisation.md
+      - name: Check Mermaid diagrams
+        run: test "$(grep -RIl '```mermaid' README.md docs | wc -l)" -ge 4
